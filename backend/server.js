@@ -9,6 +9,7 @@ import userRoutes from "./routes/user.routes.js";
 
 import connectMongoDB from "./db/connectMongoDB.js";
 import postRoutes from "./routes/post.routes.js";
+import notificationRoutes from "./routes/notification.routes.js"
 
 dotenv.config();
 cloudinary.config({
@@ -23,9 +24,11 @@ const PORT = process.env.PORT||5001;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // to parse form data(urlencoded)
 app.use(cookieParser());
+
 app.use("/api/auth",authRoutes);
 app.use("/api/users",userRoutes);
 app.use("/api/posts",postRoutes)
+app.use("/api/notifications", notificationRoutes);
 
 app.listen(PORT,()=>{
     console.log("Server is running on port 5001");
