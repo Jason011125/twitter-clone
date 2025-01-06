@@ -60,10 +60,6 @@ const Post = ({ post }) => {
             }
         },
         onSuccess: (updatedLikes) => {
-            // this is not the best UX, bc it will refetch all posts
-            // queryClient.invalidateQueries({ queryKey: ["posts"] });
-
-            // instead, update the cache directly for that post
             queryClient.setQueryData(["posts"], (oldData) => {
                 return oldData.map((p) => {
                     if (p._id === post._id) {
@@ -98,10 +94,17 @@ const Post = ({ post }) => {
                 throw new Error(error);
             }
         },
-        onSuccess: () => {
-            toast.success("Comment posted successfully");
+        onSuccess: (updatedComments) => {
+            queryClient.setQueryData(["posts"], (oldData) => {
+                return oldData.map((p) => {
+                    if (p._id === post._id) {
+                        return { ...p, comments: updatedComments };
+                    }
+                    return p;
+                });
+            });
             setComment("");
-            queryClient.invalidateQueries({ queryKey: ["posts"] });
+            toast.success("Comment posted successfully");
         },
         onError: (error) => {
             toast.error(error.message);
