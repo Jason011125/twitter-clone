@@ -141,7 +141,6 @@ export const updateUser = async (req, res) => {
         user.coverImg = coverImg || user.coverImg;
 
         user = await user.save();
-        console.log(user);
         // password should be null in response
         user.password = null;
 
